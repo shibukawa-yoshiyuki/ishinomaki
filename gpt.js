@@ -1,5 +1,3 @@
-// gpt.js
-
 async function generateImage(prompt) {
     const apiKey = 'YOUR_API_KEY'; // OpenAI APIキーをここに入れてください
     const endpoint = 'https://api.openai.com/v1/images/generations';
@@ -25,11 +23,17 @@ async function generateImage(prompt) {
     return data.data[0].url; // 生成された画像のURLを取得
 }
 
-function sendToGPT() {
-    const prompt = 'おはよう'; // 送信する固定の文字列
+function sendToGPT(prompt) {
     generateImage(prompt).then(imageUrl => {
+        console.log('prompt:', prompt)
         console.log('生成された画像のURL:', imageUrl);
         document.getElementById('output').value = `生成された画像のURL: ${imageUrl}`; // outputに表示
+
+        // 画像を表示する
+        const imgElement = document.getElementById('generatedImage');
+        imgElement.src = imageUrl;
+        imgElement.style.display = 'block'; // 画像を表示
+
     }).catch(error => {
         console.error('エラー:', error);
         document.getElementById('output').value = `エラー: ${error.message}`; // エラーをoutputに表示

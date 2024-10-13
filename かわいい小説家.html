@@ -242,7 +242,13 @@ window.onload = function () {
 	<br>
 	<textarea rows="15" cols="50" id="output" readonly="" style="width: 500px; float:center"></textarea>
 	<br>
-	<input type="button" value="GPTに投げる" onclick="sendToGPT('おはよう');">
+	<input type="button" value="GPTに投げる" onclick="sendToGPT('おはようのイメージをチューリップで表現して');">
+
+	<!-- 画像を表示 -->
+	<div id="imageContainer" style="text-align: center; margin-top: 20px;">
+		<img id="generatedImage" src="" alt="生成された画像" style="max-width: 50%; height: auto; display: none;">
+	</div>
+
 	<span id="debug" style="display:none;">
 	<input type="button" value="書き出し" onclick="dump();">
 	<label class="nowrap"><input type="checkbox" id="inflect" checked="">活用</label>
