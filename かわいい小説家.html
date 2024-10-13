@@ -92,56 +92,53 @@ var sententialRules = [
 ];
 
 function run() {
-    let numa = document.getElementById('forma').information.selectedIndex;
-    let numb = document.getElementById('formb').information.selectedIndex;
-    type = document.getElementById('forma').information.options[numa].value;
-    page = document.getElementById('formb').information.options[numb].value;
-	var input = document.getElementById('input');
-	var text = input.value || input.placeholder;
-	if(document.getElementById('adult').checked) {
-		dictionary = antonymDictionary;
-	} else {
-		dictionary = originalDictionary;
-	}
-	text = tokenize(text, numb);
-	if (document.getElementById('literal').checked) {
-		text = text.replace(/(.+?)([:.\n]|$)/g, function(sentence) {
-			for (var index in literalRules) {
-				sentence = sentence.replace(literalRules[index][0], literalRules[index][1]);
-			}
-			return sentence;
-		});
-	}
-	if (document.getElementById('sentential').checked) {
-		text = text.replace(/(.+?)([:.\n]|$)/g, function(sentence) {
-			for (var index in sententialRules) {
-				if (sentence.search(sententialRules[index][0]) >= 0) {
-					return sentence.replace(sententialRules[index][0], sententialRules[index][1]);
-				}
-			}
-			return sentence;
-		});
-	}
-	if (document.getElementById('inflect').checked) {
-		text = untokenize(text);
-	}
-	if (document.getElementById('literal').checked) {
-		text = text.replace(/[a-z]+/ig, function(word) {
-			if (word in englishDictionary) {
-				return englishDictionary[word];
-			}
-			var lowerWord = word.toLowerCase();
-			if (lowerWord in englishDictionary) {
-				var lowerAntonym = englishDictionary[lowerWord];
-				if (word.match(/[a-z]/)) {
-					return lowerAntonym.charAt(0).toUpperCase() + lowerAntonym.substring(1);
-				} else {
-					return lowerAntonym.toUpperCase();
-				}
-			}
-			return word;
-		});
-	}
+	
+    var input = document.getElementById('input');
+    var text = input.value || input.placeholder;
+    var dictionary;
+	
+	dictionary = antonymDictionary;
+	text = tokenize(text, 13);
+	text = text.replace(/(.+?)([:.\n]|$)/g, function(sentence) {
+            for (var index in literalRules) {
+                sentence = sentence.replace(literalRules[index][0], literalRules[index][1]);
+            }
+            return sentence;
+        });
+	text = text.replace(/(.+?)([:.\n]|$)/g, function(sentence) {
+            for (var index in sententialRules) {
+                if (sentence.search(sententialRules[index][0]) >= 0) {
+                    return sentence.replace(sententialRules[index][0], sententialRules[index][1]);
+                }
+            }
+            return sentence;
+        });
+	text = untokenize(text);
+	text = text.replace(/[a-z]+/ig, function(word) {
+            if (word in englishDictionary) {
+                return englishDictionary[word];
+            }
+            var lowerWord = word.toLowerCase();
+            if (lowerWord in englishDictionary) {
+                var lowerAntonym = englishDictionary[lowerWord];
+                if (word.match(/[A-Z]/)) {
+                    return lowerAntonym.charAt(0).toUpperCase() + lowerAntonym.substring(1);
+                } else {
+                    return lowerAntonym.toUpperCase();
+                }
+            }
+            return word;
+    });
+
+    if (document.getElementById('interial').checked) {
+    }
+
+    if (document.getElementById('sentential').checked) {
+    }
+
+    if (document.getElementById('inflect').checked) {
+    }
+
 	document.getElementById('output').value = text;
 }
 
@@ -239,8 +236,8 @@ window.onload = function () {
 	<input type="button" value="↑ペースト" onclick="paste();" style="display:none">
 	<input type="button" value="決定↓" onclick="run();">
     
-	<label class="nowrap"><input type="checkbox" id="adult" checked="">成人向けか</label>
-    <label class="nowrap"><input type="checkbox" id="irustlate" checked="">イラスト</label>
+	<label class="nowrap"><input type="checkbox" id="interial" checked="">成人向けか</label>
+    <label class="nowrap"><input type="checkbox" id="sentential" checked="">イラスト</label>
 	<br>
 	<textarea rows="15" cols="50" id="output" readonly="" style="width: 500px; float:center"></textarea>
 	<br>
