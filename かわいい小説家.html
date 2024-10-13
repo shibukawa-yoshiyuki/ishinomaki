@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>
+	<title>かわいい小説家</title>
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" type="text/css" href="kawaii.css">
+	<script src="kawaii0.js">
+    </script>
+    <script type="text/javascript" src="kawaii.js">
+    </script>
+	<script type="text/javascript" src="kawaii2.js">
+    </script>
+	<script type="text/javascript" src="kawaii3.js">
+    </script>
+	<script type="text/javascript" src="kawaii4.js">
+    </script>
+	<script>
+
+var literalRules = [
+	[/(([PB]<た>)?u)?,(前|後|後ろ)([_,])/g,function($0,$1,$2,$3,$4){return($1?$3=='前'?'P<た>u,後':'u,前':$3=='前'?',後':',前')+$4}],
+	[/_から,(近c|近づk|近寄r|近付けl|入r|入れl|行x|加えl|足s|教えl|会w|合w|合わせl)/g,'_に,$1'],
+	[/_から,(付k|挟m|陥r|座r|刺s|差s|沿w|含めl|当てl|捨てl|乗せl|寄r)/g,'_に,$1'],
+	[/_に,(遠c|遠ざかr|取れl|抜k|退k|脱S|立t|抜k|引k|離れl|除k|学b|除k|拾w|外s|離s)/g,'_から,$1'],
+	[/_に,(発t|疎m|離れl|追w|外れl|外s|逸れl|疎m|待t|抱えl|眺めl)/g,'_を,$1'],
+	[/_に,(違w|別れl|異なr)/g,'_と,$1'],
+	[/_を,(着k|入r|親しm|至r|留まr|乗r|合w|当たr|親しm|溢れl|追いつk|気づk|対@)/g,'_に,$1'],
+	[/_を,(逃げl)/g,'_から,$1'],
+	[/_と,(似l)/g,'_に,$1'],
+	[/_と,(逃げl)/g,'_から,$1'],
+	[/_へ,(住m)/g,'_に,$1'],
+	[/_から,(終えl|終わr)/g,'_で,$1'],
+	[/<(来|く)る>|(行|い|ゆ)x/g,function($0,$1,$2){return $1?'行x':'<来る>'}],
+	[/([kxgsztdnhbmyrwjN])[aA]させl/g,'$1As'],
+	[/(<来る>|<くる>|[lSZ])[aA](せl|s)/g,'$1Aさせl'],
+	[/([kxgsztdnhbmyrwjN])[aA]られl/g,'$1Aれl'],
+	[/(<来る>|<くる>|[lSZ])([aA]れ|e)l/g,'$1Aられl'],
+	[/(,無c)|(,有r|,在r|,或r)/g,function($0,$1,$2){return $1?',有r':',無c'}],
+];
+
+var sententialRules = [
+	[/<ます>A<ず><ん>u<です>/g,'<ます>'],
+	[/<ます>A<ず><ん>/g,'<ます>'],
+	[/%<(な|に|の|だ|ね)>(I|uじゃ),?なc<です>/,'%<です>'],
+	[/(で|じゃ),?なcu<です>/,'_<です>'],
+	[/[auU]まい/g,'o<う>U'],
+	[/(iなさR|[TD]て,(くだ|下)さR)E/,'aなcuで,くださRE'],
+	[/[uU]な;/,'E'],
+	[/aなc(uよう%<に>)?I,?<する>/,'uよう%<に>I,<する>'],
+	[/aなc(uよう%<に>)?I,?なr/,'uよう%<に>I,なr'],
+	[/aなcuで,おk/g, 'Tて,みl'],
+	[/aなcTて,?も,/,'Tても,'],
+	[/aなcT(て,?は|ちゃ),/,'Tては,'],
+	[/aなcTて,/,'Tて,'],
+	[/A<ず>Uに,/,'Tて,'],
+	[/aなcuで/,'Tて'],
+	[/aなc(<ゃ>)?e(ば)?,/g,'eば,'],
+	[/%<(な|に|の|だ|ね)>(I|uじゃ),?なc/,'%<$1>'],
+	[/_(で|じゃ),?なcuの_/g, '_な,の_'],
+	[/A<ず>(<ん>)?/g,''],
+	[/(で|じゃ),なc/g,'<だ>'],
+	[/,なc/g,',あr'],
+	[/aなcP<た>/g,'P<た>'],
+	[/aなc/,''],
+
+	[/<ます>P/g,'<ます>A<ず><ん>u<です>P'],
+	[/<ます>U/,'<ます>A<ず><ん>U'],
+	[/%<です>/,'%<ね>uじゃ,なcu<です>'],
+	[/<です>/g,'じゃ,なcu<です>'],
+	[/<(な|に|の|だ|ね)>o<う>[uU]/g,'<$1>uまい'],
+	[/([kxgstnbmrwv]|<ます>)o<う>[uU]/g,'$1Uまい'],
+	[/o<う>[uU]/g,'aまい'],
+	[/o;/,'aまい;'],
+	[/aなcuで,(くだ|下)さRE/,'iなさRE'],
+	[/E/,'uな;'],
+	[/uよう%<に>I,?<する>/,'aなcI,<する>'],
+	[/uよう%<に>I,?なr/,'aなcI,なr'],
+	[/[TD]て,みl/g, 'aなcuで,おk'],
+	[/[TD]て,?も,/,'aなcTても,'],
+	[/[TD](て,?は|ちゃ),/,'aなcTては,'],
+	[/[TD]て/,'aなcuで'],
+	[/(<ゃ>)?e(ば)?,/g,'aなceば,'],
+	[/%<(な|に|の|だ|ね)>(I,あr)?/,'%<$1>aなc'],
+	[/_な,の_/g, '_で,なcuの_'],
+	[/で,あr/g,'で,なc'],
+	[/,あr/g,',なc'],
+	[/[PB]<た>/g,'aなcP<た>'],
+	[/c/,'caなc'],
+	[/u/,'aなcu'],
+	[/U/,'aなcU'],
+	[/I/,'A<ず>I'],
+
+];
+
+function run() {
+    let numa = document.getElementById('forma').information.selectedIndex;
+    let numb = document.getElementById('formb').information.selectedIndex;
+    type = document.getElementById('forma').information.options[numa].value;
+    page = document.getElementById('formb').information.options[numb].value;
+	var input = document.getElementById('input');
+	var text = input.value || input.placeholder;
+	if(document.getElementById('adult').checked) {
+		dictionary = antonymDictionary;
+	} else {
+		dictionary = originalDictionary;
+	}
+	text = tokenize(text, numb);
+	if (document.getElementById('literal').checked) {
+		text = text.replace(/(.+?)([:.\n]|$)/g, function(sentence) {
+			for (var index in literalRules) {
+				sentence = sentence.replace(literalRules[index][0], literalRules[index][1]);
+			}
+			return sentence;
+		});
+	}
+	if (document.getElementById('sentential').checked) {
+		text = text.replace(/(.+?)([:.\n]|$)/g, function(sentence) {
+			for (var index in sententialRules) {
+				if (sentence.search(sententialRules[index][0]) >= 0) {
+					return sentence.replace(sententialRules[index][0], sententialRules[index][1]);
+				}
+			}
+			return sentence;
+		});
+	}
+	if (document.getElementById('inflect').checked) {
+		text = untokenize(text);
+	}
+	if (document.getElementById('literal').checked) {
+		text = text.replace(/[a-z]+/ig, function(word) {
+			if (word in englishDictionary) {
+				return englishDictionary[word];
+			}
+			var lowerWord = word.toLowerCase();
+			if (lowerWord in englishDictionary) {
+				var lowerAntonym = englishDictionary[lowerWord];
+				if (word.match(/[a-z]/)) {
+					return lowerAntonym.charAt(0).toUpperCase() + lowerAntonym.substring(1);
+				} else {
+					return lowerAntonym.toUpperCase();
+				}
+			}
+			return word;
+		});
+	}
+	document.getElementById('output').value = text;
+}
+
+function dump() {
+	var text = '';
+	for (var left in antonymDictionary) {
+		var right = antonymDictionary[left];
+		if (typeof(right) == 'string' && right !== originalDictionary[left]) {
+			if (left.match(/[a-z]$/i)) {
+				right += left.charAt(left.length - 1) + 'U';
+				left += 'U';
+			} else if (left.match(/@$/i)) {
+				right += '@<する>U';
+				left += '<する>U';
+			} else if (left.match(/%$/i)) {
+				right += '%<な>U';
+				left += '<な>U';
+			}
+			text += untokenize(left) + ',' + untokenize(right) + '\n';
+		}
+	}
+	document.getElementById('output').value = text;
+}
+
+var buffer = null;
+function empty() {
+	var input = document.getElementById('input');
+	if (input.value) {
+		buffer = input.value;
+		input.value = '';
+		input.focus();
+	} else {
+		input.value = buffer || '';
+		buffer = null;
+	}
+	document.getElementById('output').value = '';
+}
+
+function paste() {
+	var input = document.getElementById('input');
+	if (input.value) {
+		empty();
+	}
+	input.focus();
+	var result = document.execCommand('paste');
+	output.blur();
+}
+
+function copy() {
+	var input = document.getElementById('input');
+	var output = document.getElementById('output');
+	if (input.value) {
+		run();
+	}
+	output.selectionStart = 0;
+	output.selectionEnd = output.value.length;
+	output.focus();
+	var result = document.execCommand('copy');
+	output.blur();
+}
+
+window.onload = function () {
+	if (window.location.search) {
+		document.getElementById('debug').style.display = 'inline';
+	}
+}
+
+	</script>
+	<meta http-equiv="origin-trial" content="AlK2UR5SkAlj8jjdEc9p3F3xuFYlF6LYjAML3EOqw1g26eCwWPjdmecULvBH5MVPoqKYrOfPhYVL71xAXI1IBQoAAAB8eyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3NTgwNjcxOTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="Amm8/NmvvQfhwCib6I7ZsmUxiSCfOxWxHayJwyU1r3gRIItzr7bNQid6O8ZYaE1GSQTa69WwhPC9flq/oYkRBwsAAACCeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3NTgwNjcxOTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="A9uiHDzQFAhqALUhTgTYJcz9XrGH2y0/9AORwCSapUO/f7Uh7ysIzyszNkuWDLqNYg8446Uj48XIstBW1qv/wAQAAACNeyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiRmxlZGdlQmlkZGluZ0FuZEF1Y3Rpb25TZXJ2ZXIiLCJleHBpcnkiOjE3Mjc4MjcxOTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A9R+gkZL3TWq+Z7RJ2L0c7ZN7FZD5z4mHmVvjrPitg/EMz9P3j5d3W7Vw5ZR9jtJGmWKltM4BO3smNzpCgwYuwwAAACTeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiRmxlZGdlQmlkZGluZ0FuZEF1Y3Rpb25TZXJ2ZXIiLCJleHBpcnkiOjE3Mjc4MjcxOTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><script async="" src="./反対にする_files/ca-pub-2793209132643427"></script><script async="" src="./反対にする_files/AGSKWxUWL4VqK0p0-D2rlmf5l0o68joiwMgC2plZMq-hW4Te01HZdGw-DgupSsv0kqaeDip0k5GAlNYfsce56hUl8FLBMvMQJjHJGv9YjykCUo4SkWN1GrB95-5z-8_gi5GayIYYL3O-6w=="></script><script async="" src="./反対にする_files/AGSKWxUxpN3GY1MQ4f2YUMIKlGwWqA7UQgKdXrAQ2Yqprj_y8KYzHztbDKT6T1ob6fnhU90CMY-LJmaPoCDRKIZgnA1uLrV7uz7ochTW0xVShN6Tm6mVnbOUheHVf0sist5pxJg3ScU8VQ=="></script><script async="" src="./反対にする_files/AGSKWxU-r-Z9j30YZTUd4YqfA0nMho3dj05EkF72o4nUEF_HzAFO5QMmhnyZ3HgN60ALNc9E8f4FjYwwSIMOtMzK-g9CN4CIidkEnLKk_5UnyeplJNqSfbgbf_5gPfDUt7vrnGwUfAA97g=="></script><script async="" src="./反対にする_files/AGSKWxUBulYkRLaKsp_FKhLZWrncCYo7Q1i2OFsSO8COlvE4GpajhETfdgww6R107i-77-RvZbWx6MO20GAPTX-fpnRiTUfgYsLBf4MhiHYg9GorQfgrw4L9ddl1EbveF4aVmNj2qHN7XA=="></script></head>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>かわいい小説家</h1>
+
+<div class="page" style="text-align: center;">
+
+    <p>ジャンル</p>
+    <form action="#" id="forma">
+        <select name="information">
+            <option value="1">推理小説</option>
+            <option value="2">恋愛小説</option>
+            <option value="3">SF小説</option>
+            <option value="4">冒険小説</option>
+            <option value="5">歴史小説</option>
+        </select>
+    </form>
+    <p>長さ</p>
+    <form action="#" id="formb">
+        <input type="text" name="information2">
+    </form>
+
+<form onsubmit="return false">
+	<textarea rows="15" cols="50" id="input" placeholder=" ここに文章を入力" style="width: 500px; float:center"></textarea><br>
+	<input type="button" value="消す" onclick="empty();">
+	<input type="button" value="↑ペースト" onclick="paste();" style="display:none">
+	<input type="button" value="決定↓" onclick="run();">
+    
+	<label class="nowrap"><input type="checkbox" id="adult" checked="">成人向けか</label>
+    <label class="nowrap"><input type="checkbox" id="irustlate" checked="">イラスト</label>
+	<br>
+	<textarea rows="15" cols="50" id="output" readonly="" style="width: 500px; float:center"></textarea>
+	<br>
+	<span id="debug" style="display:none;">
+	<input type="button" value="書き出し" onclick="dump();">
+	<label class="nowrap"><input type="checkbox" id="inflect" checked="">活用</label>
+	<label class="nowrap"><input type="checkbox" id="tweetInput" checked="">原文</label>
+	<label class="nowrap"><input type="checkbox" id="tweetURL" checked="">URL</label>
+	</span>
+	<input type="button" value="コピー" onclick="copy();">
+</form>
+
+<div class="note">
+ここに書いてある文章を書くと、<br>
+AIがかわいく変換してくれます。
+</div>
+
+<br>
+<script async="" src="kawaii2.txt"></script>
