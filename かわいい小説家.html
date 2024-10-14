@@ -200,6 +200,14 @@ function copy() {
 	output.blur();
 }
 
+function txtGenerated() {
+	if(document.getElementById('sentential').checked == true){
+		sendToGPT(document.getElementById('input').value+"からかわいい画像を作って", 0);
+	}else{
+		sendToGPT(document.getElementById('input').value+"からかわいい文章を作って", 1);
+	}
+}
+
 window.onload = function () {
 	if (window.location.search) {
 		document.getElementById('debug').style.display = 'inline';
@@ -211,12 +219,12 @@ window.onload = function () {
 	<link rel="stylesheet" href="style.css">
 	<script src="gpt.js"></script>
 </head>
-<body>
-<h1>かわいい小説家</h1>
+<body class="bg_pattern Polka_v2">
+<h1><img src="./image/title.png" alt="かわいい小説家"></h1>
 
 <div class="page" style="text-align: center;">
 
-    <p>ジャンル</p>
+    <p><img src="./image/genre.png" alt="ジャンル"></p>
     <form action="#" id="forma">
         <select name="information">
             <option value="1">推理小説</option>
@@ -226,23 +234,26 @@ window.onload = function () {
             <option value="5">歴史小説</option>
         </select>
     </form>
-    <p>長さ</p>
+    <p><img src="./image/length.png" alt="長さ"></p>
     <form action="#" id="formb">
         <input type="text" name="information2">
     </form>
 
 <form onsubmit="return false">
-	<textarea rows="15" cols="50" id="input" placeholder=" ここに文章を入力" style="width: 500px; float:center"></textarea><br>
-	<input type="button" value="消す" onclick="empty();">
+	<textarea rows="15" cols="50" id="input" placeholder="" style="width: 500px; float:center"></textarea><br>
+
+	<input type="image" id="image" class="form_button" alt="消す" src="./image/erace.png" onclick="empty();">
 	<input type="button" value="↑ペースト" onclick="paste();" style="display:none">
-	<input type="button" value="決定↓" onclick="run();">
-    
-	<label class="nowrap"><input type="checkbox" id="interial" checked="">成人向けか</label>
-    <label class="nowrap"><input type="checkbox" id="sentential" checked="">イラスト</label>
+	<input type="image" id="image" class="form_button" alt="決定" src="./image/send.png" onclick="run();">
+	<input type="image" id="a" class="form_button" alt="a" src="./image/auto.png">
+	<br>
+	<label class="nowrap"><input type="checkbox" id="interial"><img src="./image/adult.png" alt="成人向けか"></label>
+    <label class="nowrap"><input type="checkbox" id="sentential"><img src="./image/withimg.png" alt="イラスト"></label>
 	<br>
 	<textarea rows="15" cols="50" id="output" readonly="" style="width: 500px; float:center"></textarea>
 	<br>
-	<input type="button" value="GPTに投げる" onclick="sendToGPT('おはようのイメージをチューリップで表現して', 0);">
+	<input type="image" id="image" class="form_button" alt="GPTに投げる" src="./image/chatgpt.png" onclick="txtGenerated();">
+	<input type="image" id="image" class="form_button" alt="コピー" src="./image/copy.png" onclick="copy();">
 
 	<!-- 画像を表示 -->
 	<div id="imageContainer" style="text-align: center; margin-top: 20px;">
@@ -255,13 +266,14 @@ window.onload = function () {
 	<label class="nowrap"><input type="checkbox" id="tweetInput" checked="">原文</label>
 	<label class="nowrap"><input type="checkbox" id="tweetURL" checked="">URL</label>
 	</span>
-	<input type="button" value="コピー" onclick="copy();">
 </form>
 
-<div class="note">
-ここに書いてある文章を書くと、<br>
-AIがかわいく変換してくれます。
+<div class="note"><img src="./image/note.png" alt="ここに書いてある文章を書くと、AIがかわいく変換してくれます。">
 </div>
 
 <br>
+<!--
 <script async="" src="kawaii2.txt"></script>
+-->
+</body>
+</html>

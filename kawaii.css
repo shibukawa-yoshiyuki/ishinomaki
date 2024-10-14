@@ -2,6 +2,8 @@ body {
 	text-align: center;
 	font-family: sans-serif;
     background-color: #ff88ff;
+	background-image: url(./image/back.jpeg);
+	background-size:auto;
 	margin: 8px;
 }
 
@@ -26,7 +28,6 @@ form{
 }
 
 .note {
-	background: #ff88ff;
 	display: inline-block;
 	margin-top: 16px;
 	margin-bottom: 16px;
@@ -109,6 +110,16 @@ dd {
 
 .neko .breadcrumb, .neko .breadcrumb a {
 	color: #ddd;
+}
+
+.form_button:hover{
+	opacity:0.5;
+	cursor: pointer;
+}
+
+.form_button:active{
+	position: relative;
+	top: 3px;
 }
 
 @media (max-width: 480px) {
