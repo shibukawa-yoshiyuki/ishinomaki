@@ -1,12 +1,18 @@
-async function generateImage(prompt) {
-    const apiKey = 'YOUR_API_KEY'; // OpenAI APIキーをここに入れてください
-    const endpoint = 'https://api.openai.com/v1/images/generations';
+const PICTURE = 0;
+const TEXT = 1;
 
-    const response = await fetch(endpoint, {
+const API_CONFIG = {
+    apiKey: 'YOUR_API_KEY', // OpenAI APIキーをここに入れてください
+    imageEndpoint: 'https://api.openai.com/v1/images/generations',
+    textEndpoint: 'https://api.openai.com/v1/chat/completions'
+};
+
+async function generateImage(prompt) {
+    const response = await fetch(API_CONFIG.imageEndpoint, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
+            'Authorization': `Bearer ${API_CONFIG.apiKey}`,
         },
         body: JSON.stringify({
             prompt: prompt,
@@ -24,14 +30,11 @@ async function generateImage(prompt) {
 }
 
 async function generateText(prompt) {
-    const apiKey = 'YOUR_API_KEY'; // OpenAI APIキーをここに入れてください
-    const endpoint = 'https://api.openai.com/v1/chat/completions';
-
-    const response = await fetch(endpoint, {
+    const response = await fetch(API_CONFIG.textEndpoint, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
+            'Authorization': `Bearer ${API_CONFIG.apiKey}`,
         },
         body: JSON.stringify({
             model: 'gpt-3.5-turbo',
@@ -48,8 +51,6 @@ async function generateText(prompt) {
     return data.choices[0].message.content; // 生成されたテキストを取得
 }
 
-const PICTURE = 0;
-const TEXT = 1;
 function sendToGPT(prompt, mode) {
     if (mode === PICTURE) { // 画像生成
         generateImage(prompt).then(imageUrl => {
